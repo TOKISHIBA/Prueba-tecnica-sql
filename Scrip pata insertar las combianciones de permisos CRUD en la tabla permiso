@@ -1,0 +1,61 @@
+-- Generar todas las combinaciones posibles para la tabla PERMISSION
+DECLARE @id_permi INT = 0;
+
+-- Tabla temporal para almacenar combinaciones
+CREATE TABLE #Combinations (
+    id_permi INT,
+    can_create BIT,
+    can_read BIT,
+    can_update BIT,
+    can_delete BIT,
+    can_import BIT,
+    can_export BIT,
+    name NVARCHAR(255),
+    description NVARCHAR(MAX)
+);
+
+-- Insertar todas las combinaciones
+INSERT INTO #Combinations (id_permi, can_create, can_read, can_update, can_delete, can_import, can_export, name, description)
+SELECT 
+    ROW_NUMBER() OVER (ORDER BY a.n, b.n, c.n, d.n, e.n, f.n) AS id_permi,  -- Generar ID incremental
+    a.n AS can_create,
+    b.n AS can_read,
+    c.n AS can_update,
+    d.n AS can_delete,
+    e.n AS can_import,
+    f.n AS can_export,
+    CONCAT(
+        CASE a.n WHEN 1 THEN 'Create, ' ELSE '' END,
+        CASE b.n WHEN 1 THEN 'Read, ' ELSE '' END,
+        CASE c.n WHEN 1 THEN 'Update, ' ELSE '' END,
+        CASE d.n WHEN 1 THEN 'Delete, ' ELSE '' END,
+        CASE e.n WHEN 1 THEN 'Import, ' ELSE '' END,
+        CASE f.n WHEN 1 THEN 'Export' ELSE '' END
+    ) AS name,
+    CONCAT(
+        'Permissions: ',
+        CASE a.n WHEN 1 THEN 'Create, ' ELSE '' END,
+        CASE b.n WHEN 1 THEN 'Read, ' ELSE '' END,
+        CASE c.n WHEN 1 THEN 'Update, ' ELSE '' END,
+        CASE d.n WHEN 1 THEN 'Delete, ' ELSE '' END,
+        CASE e.n WHEN 1 THEN 'Import, ' ELSE '' END,
+        CASE f.n WHEN 1 THEN 'Export' ELSE '' END
+    ) AS description
+FROM 
+    (SELECT 0 AS n UNION SELECT 1) a,  -- can_create
+    (SELECT 0 AS n UNION SELECT 1) b,  -- can_read
+    (SELECT 0 AS n UNION SELECT 1) c,  -- can_update
+    (SELECT 0 AS n UNION SELECT 1) d,  -- can_delete
+    (SELECT 0 AS n UNION SELECT 1) e,  -- can_import
+    (SELECT 0 AS n UNION SELECT 1) f;  -- can_export
+
+-- Insertar los datos generados en la tabla Permission
+INSERT INTO Permission (name, description, can_create, can_read, can_update, can_delete, can_import, can_export)
+SELECT name, description, can_create, can_read, can_update, can_delete, can_import, can_export
+FROM #Combinations;
+
+-- Limpiar la tabla temporal
+DROP TABLE #Combinations;
+
+-- Verificar el resultado
+SELECT * FROM Permission;
