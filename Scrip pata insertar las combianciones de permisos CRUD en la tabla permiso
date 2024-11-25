@@ -1,4 +1,33 @@
--- Generar todas las combinaciones posibles para la tabla PERMISSION
+
+/*
+
+PASO 1 INSERTAMOS ALGUNOS USUARIOS EN LA TABLA DE USUARIOS PARA LOS PERMISOS
+
+INSERT INTO [User] (user_username, user_password, user_email, user_phone, user_is_admin, user_is_active)
+VALUES
+    ('user1', 'password1', 'user1@example.com', '1234567890', 0, 1),
+    ('user2', 'password2', 'user2@example.com', '0987654321', 1, 1),
+    ('user3', 'password3', 'user3@example.com', NULL, 0, 1),
+    ('user4', 'password4', 'user4@example.com', '1234509876', 0, 0),
+    ('user5', 'password5', 'user5@example.com', '5678901234', 1, 1),
+    ('user6', 'password6', 'user6@example.com', NULL, 0, 1),
+    ('user7', 'password7', 'user7@example.com', '9876543210', 0, 1),
+    ('user8', 'password8', 'user8@example.com', '4561237890', 1, 0),
+    ('user9', 'password9', 'user9@example.com', '3217896540', 0, 1),
+    ('user10', 'password10', 'user10@example.com', NULL, 1, 1);
+
+-- Verificar los registros insertados
+SELECT * FROM [User];
+
+*/
+
+
+
+
+
+/*
+
+-- Generar todas las combinaciones posibles para la tabla Permission
 DECLARE @id_permi INT = 0;
 
 -- Tabla temporal para almacenar combinaciones
@@ -14,7 +43,7 @@ CREATE TABLE #Combinations (
     description NVARCHAR(MAX)
 );
 
--- Insertar todas las combinaciones
+-- PASO 2 INSERTAMOS LA COMBINACION DE PERMISOS PARA CADA COMPAÑIA
 INSERT INTO #Combinations (id_permi, can_create, can_read, can_update, can_delete, can_import, can_export, name, description)
 SELECT 
     ROW_NUMBER() OVER (ORDER BY a.n, b.n, c.n, d.n, e.n, f.n) AS id_permi,  -- Generar ID incremental
@@ -59,3 +88,86 @@ DROP TABLE #Combinations;
 
 -- Verificar el resultado
 SELECT * FROM Permission;
+
+*/
+
+
+
+/*
+-- PASO 3 INSERTAR DOS COMPAÑIAS COMO EJEMPLO QUE SERAN NUESTROS CLIENTES.
+-- Insertar compañías
+INSERT INTO Company (
+    compa_name, 
+    compa_tradename, 
+    compa_doctype, 
+    compa_docnum, 
+    compa_address, 
+    compa_city, 
+    compa_state, 
+    compa_country, 
+    compa_industry, 
+    compa_phone, 
+    compa_email, 
+    compa_website, 
+    compa_logo, 
+    compa_active
+)
+VALUES
+    -- Registro para Rappi
+    (
+        'Rappi S.A.S.', 
+        'Rappi', 
+        'NI', 
+        '900345678', 
+        'Carrera 12 # 84-55', 
+        'Bogotá', 
+        'Cundinamarca', 
+        'Colombia', 
+        'Tecnología y Logística', 
+        '+57 1 1234567', 
+        'contacto@rappi.com', 
+        'https://www.rappi.com', 
+        NULL, 
+        1
+    ),
+    -- Registro para McDonald's
+    (
+        'Arcos Dorados Colombia S.A.S.', 
+        'McDonald', 
+        'NI', 
+        '901234567', 
+        'Avenida Carrera 15 # 100-41', 
+        'Bogotá', 
+        'Cundinamarca', 
+        'Colombia', 
+        'Alimentos y Bebidas', 
+        '+57 1 7654321', 
+        'info@mcdonalds.co', 
+        'https://www.mcdonalds.co', 
+        NULL, 
+        1
+    );
+
+*/
+
+
+
+
+ /*
+-- PASO 4 INSERTAMOS ALGUNOS ROLES PARA LA PRIMERA COMPAÑIA--
+
+INSERT INTO Role (company_id, role_name, role_code, role_description, role_active)
+VALUES
+    (1, 'CFO', 'CFO_ROLE', 'Chief Financial Officer, responsable de la estrategia financiera y la gestión de riesgos.', 1),
+    (1, 'Controller Financiero', 'CONTROLLER_ROLE', 'Responsable de supervisar y controlar las operaciones contables y financieras.', 1),
+    (1, 'Planeador Financiero', 'PLANNER_ROLE', 'Encargado de planificar las estrategias financieras y presupuestarias.', 1),
+    (1, 'Contador', 'ACCOUNTANT_ROLE', 'Responsable de registrar y analizar las operaciones contables de la empresa.', 1),
+    (1, 'Tesorero', 'TREASURER_ROLE', 'Gestiona los recursos financieros, la liquidez y los riesgos asociados.', 1);
+
+*/
+
+
+
+
+
+/*
